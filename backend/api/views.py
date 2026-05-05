@@ -44,7 +44,7 @@ def plan_trip(request):
         if "routes" not in res or len(res["routes"]) == 0:
             return Response(
                 {
-                    "error": "Routing failed, please try again",
+                    "error": "Routing failed, pleaase try again",
                     "details": res
                 },
                 status=400

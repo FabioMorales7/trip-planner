@@ -24,23 +24,49 @@ def geocode(place):
 
 def generate_logs(total_hours, cycle_used):
     logs = []
-    remaining_cycle = 70 - cycle_used
+    remaining_hours = total_hours
     day = 1
 
-    while total_hours > 0 and remaining_cycle > 0:
-        drive_today = min(11, total_hours, remaining_cycle)
+    while remaining_hours > 0:
+        # 🔥 Empezamos el día a las 6:30
+        current_hour = 6.5
+
+        segments = []
+
+        # 🟡 Pre-trip inspection (30 min)
+        segments.append({
+            "type": "on_duty",
+            "start": 6.5,
+            "end": 7.0
+        })
+
+        current_hour = 7.0  # Driving empieza a las 7
+
+        # 🚛 Driving (máximo 11h por día)
+        driving_hours = min(11, remaining_hours)
+
+        segments.append({
+            "type": "driving",
+            "start": current_hour,
+            "end": current_hour + driving_hours
+        })
+
+        current_hour += driving_hours
+        remaining_hours -= driving_hours
+
+        # 🛑 Descanso si queda tiempo
+        if remaining_hours > 0:
+            segments.append({
+                "type": "off",
+                "start": current_hour,
+                "end": 24
+            })
 
         logs.append({
             "day": day,
-            "segments": [
-                {"type": "driving", "hours": 8},
-                {"type": "on_duty", "hours": 1},  # pickup/dropoff
-                {"type": "off", "hours": 10}
-            ]
+            "segments": segments
         })
 
-        total_hours -= drive_today
-        remaining_cycle -= drive_today
         day += 1
 
     return logs
