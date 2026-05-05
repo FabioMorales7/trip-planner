@@ -11,19 +11,23 @@ function LogsView({ data }) {
   if (!data || !data.logs) return null;
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow mt-4">
-      <h2 className="font-bold mb-4">Driver Log</h2>
+    <div className="bg-slate-800 text-white p-6 rounded-2xl shadow-lg mt-6">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Driver Log</h2>
+        <button className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg">
+          Export PDF
+        </button>
+      </div>
 
       {data.logs.map((day, idx) => (
         <div key={idx} className="mb-6">
-          <h3 className="mb-2 font-semibold">Day {day.day}</h3>
+          <h3 className="mb-2 text-sm text-gray-300">Day {day.day}</h3>
 
-          {/* Timeline */}
-          <div className="border rounded overflow-hidden">
-            {/* Header (0–23) */}
-            <div className="flex text-xs border-b">
+          <div className="border border-slate-600 rounded-lg overflow-hidden">
+            {/* Header */}
+            <div className="grid grid-cols-24 text-[10px] text-gray-400 border-b border-slate-600">
               {[...Array(24)].map((_, i) => (
-                <div key={i} className="flex-1 text-center border-r">
+                <div key={i} className="text-center border-r border-slate-700">
                   {i}
                 </div>
               ))}
@@ -31,12 +35,20 @@ function LogsView({ data }) {
 
             {/* Rows */}
             {["off", "sleeper", "driving", "on_duty"].map((type) => (
-              <div key={type} className="flex border-b">
-                <div className="w-24 text-xs p-1 capitalize">
+              <div key={type} className="flex border-b border-slate-700">
+                <div className="w-28 text-xs p-2 text-gray-300 capitalize">
                   {type.replace("_", " ")}
                 </div>
 
-                <div className="flex-1 relative h-6">
+                <div className="flex-1 relative h-6 bg-slate-900">
+                  {/* Grid lines */}
+                  <div className="absolute inset-0 grid grid-cols-24">
+                    {[...Array(24)].map((_, i) => (
+                      <div key={i} className="border-r border-slate-800" />
+                    ))}
+                  </div>
+
+                  {/* Segments */}
                   {day.segments
                     .filter((seg) => seg.type === type)
                     .map((seg, i) => {
@@ -53,6 +65,7 @@ function LogsView({ data }) {
                             width: `${width}%`,
                             height: "100%",
                             backgroundColor: COLORS[type],
+                            borderRadius: "2px",
                           }}
                         />
                       );
