@@ -17,24 +17,9 @@ const LABELS = {
 function LogsView({ data }) {
   if (!data || !data.logs) return null;
 
-  // 🔥 Export PDF simple (suficiente para demo)
+  // ✅ PDF usando print (mantiene estilos)
   const handleExportPDF = () => {
-    const content = document.getElementById("log-container");
-    const win = window.open("", "", "width=900,height=700");
-
-    win.document.write(`
-      <html>
-        <head>
-          <title>Driver Log</title>
-        </head>
-        <body>
-          ${content.innerHTML}
-        </body>
-      </html>
-    `);
-
-    win.document.close();
-    win.print();
+    window.print();
   };
 
   return (
@@ -43,7 +28,7 @@ function LogsView({ data }) {
       className="bg-slate-800 text-white p-6 rounded-2xl shadow-lg mt-6"
     >
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 no-print">
         <h2 className="text-xl font-semibold">Driver Log</h2>
         <button
           onClick={handleExportPDF}
@@ -55,11 +40,13 @@ function LogsView({ data }) {
 
       {data.logs.map((day, idx) => (
         <div key={idx} className="mb-6">
-          <h3 className="mb-2 text-sm text-gray-300">Day {day.day}</h3>
+          <h3 className="mb-2 text-sm text-gray-300">
+            Day {day.day}
+          </h3>
 
           <div className="border border-slate-600 rounded-lg overflow-hidden">
             
-            {/* 🔹 Header horas */}
+            {/* Header horas */}
             <div className="flex text-[10px] text-gray-400 border-b border-slate-600">
               {[...Array(24)].map((_, i) => (
                 <div
@@ -71,10 +58,10 @@ function LogsView({ data }) {
               ))}
             </div>
 
-            {/* 🔹 Filas */}
+            {/* Filas */}
             {["off", "sleeper", "driving", "on_duty"].map((type) => (
               <div key={type} className="flex border-b border-slate-700">
-
+                
                 {/* Label */}
                 <div className="w-28 text-xs p-2 text-gray-300 font-medium">
                   {LABELS[type]}
@@ -82,8 +69,8 @@ function LogsView({ data }) {
 
                 {/* Timeline */}
                 <div className="flex-1 relative h-6 bg-slate-900">
-
-                  {/* Grid vertical */}
+                  
+                  {/* Grid */}
                   <div className="absolute inset-0 flex">
                     {[...Array(24)].map((_, i) => (
                       <div

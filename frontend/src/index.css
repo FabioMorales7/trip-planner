@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* 🔥 PRINT STYLES */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  #log-container {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  /* mantener grid visible */
+  .border-slate-600,
+  .border-slate-700,
+  .border-slate-800 {
+    border-color: #ccc !important;
+  }
+}
