@@ -1,3 +1,9 @@
+# ---------------------------------------
+# Trip Planner / ELD Log System
+# Author: Fabio Morales
+# Repo: github.com/FabioMorales7/trip-planner
+# ---------------------------------------
+
 import requests
 
 # 🔥 cache simple (nivel pro básico)

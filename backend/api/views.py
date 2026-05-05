@@ -3,6 +3,11 @@ from rest_framework.response import Response
 from .utils import generate_logs, geocode
 import requests
 
+# ---------------------------------------
+# Trip Planner / ELD Log System
+# Author: Fabio Morales
+# Repo: github.com/FabioMorales7/trip-planner
+# ---------------------------------------
 
 @api_view(['POST'])
 def plan_trip(request):

@@ -41,7 +41,9 @@ function App() {
         {data && <MapView route={data.route} />}
 
         {data && <LogsView logs={data.logs} data={data} />}
-
+        <div className="text-xs text-gray-400 mt-4 text-center">
+          Built by Fabio Morales
+        </div>
       </div>
     </div>
   );
