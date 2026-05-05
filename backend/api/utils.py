@@ -28,21 +28,34 @@ def generate_logs(total_hours, cycle_used):
     day = 1
 
     while remaining_hours > 0:
-        # 🔥 Día empieza a las 6:30
-        current_hour = 6.5
-
         segments = []
 
-        # 🟡 Pre-trip inspection (On Duty)
+        # 🔥 Inicio del día (0 → 6:30)
+        if day == 1:
+            # Día 1 empieza Off Duty
+            segments.append({
+                "type": "off",
+                "start": 0,
+                "end": 6.5
+            })
+        else:
+            # Días siguientes empiezan en Sleeper
+            segments.append({
+                "type": "sleeper",
+                "start": 0,
+                "end": 6.5
+            })
+
+        # 🔥 Pre-trip (6:30 → 7)
         segments.append({
             "type": "on_duty",
             "start": 6.5,
             "end": 7.0
         })
 
-        current_hour = 7.0  # Driving empieza a las 7
+        current_hour = 7.0
 
-        # 🚛 Driving (máximo 11h por día)
+        # 🚛 Driving
         driving_hours = min(11, remaining_hours)
 
         segments.append({
@@ -54,15 +67,11 @@ def generate_logs(total_hours, cycle_used):
         current_hour += driving_hours
         remaining_hours -= driving_hours
 
-        # 🔥 LÓGICA CORREGIDA AQUÍ
-        remaining_day_hours = 24 - current_hour
-
-        if remaining_day_hours > 0:
+        # 🔥 Fin del día
+        if current_hour < 24:
             if remaining_hours > 0:
-                # 🛌 Si el viaje continúa → Sleeper (noche)
                 segment_type = "sleeper"
             else:
-                # 📴 Si ya terminó → Off Duty
                 segment_type = "off"
 
             segments.append({
