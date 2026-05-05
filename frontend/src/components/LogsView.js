@@ -17,13 +17,38 @@ const LABELS = {
 function LogsView({ data }) {
   if (!data || !data.logs) return null;
 
+  // 🔥 Export PDF simple (suficiente para demo)
+  const handleExportPDF = () => {
+    const content = document.getElementById("log-container");
+    const win = window.open("", "", "width=900,height=700");
+
+    win.document.write(`
+      <html>
+        <head>
+          <title>Driver Log</title>
+        </head>
+        <body>
+          ${content.innerHTML}
+        </body>
+      </html>
+    `);
+
+    win.document.close();
+    win.print();
+  };
+
   return (
-    <div className="bg-slate-800 text-white p-6 rounded-2xl shadow-lg mt-6">
-      
+    <div
+      id="log-container"
+      className="bg-slate-800 text-white p-6 rounded-2xl shadow-lg mt-6"
+    >
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Driver Log</h2>
-        <button className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg">
+        <button
+          onClick={handleExportPDF}
+          className="bg-teal-500 hover:bg-teal-600 px-4 py-2 rounded-lg"
+        >
           Export PDF
         </button>
       </div>
@@ -33,7 +58,7 @@ function LogsView({ data }) {
           <h3 className="mb-2 text-sm text-gray-300">Day {day.day}</h3>
 
           <div className="border border-slate-600 rounded-lg overflow-hidden">
-
+            
             {/* 🔹 Header horas */}
             <div className="flex text-[10px] text-gray-400 border-b border-slate-600">
               {[...Array(24)].map((_, i) => (
