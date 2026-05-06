@@ -48,14 +48,21 @@ function LogsView({ data }) {
             
             {/* Header horas */}
             <div className="flex text-[10px] text-gray-400 border-b border-slate-600">
-              {[...Array(24)].map((_, i) => (
-                <div
-                  key={i}
-                  className="flex-1 text-center border-r border-slate-700"
-                >
-                  {i}
-                </div>
-              ))}
+  
+              {/* espacio para labels */}
+              <div className="w-28 border-r border-slate-700"></div>
+
+              {/* horas */}
+              <div className="flex flex-1">
+                {[...Array(24)].map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 text-center border-r border-slate-700"
+                  >
+                    {i}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Filas */}

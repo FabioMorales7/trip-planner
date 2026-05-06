@@ -14,20 +14,17 @@ def plan_trip(request):
     try:
         data = request.data
 
-        # 🔹 Inputs (ciudades)
         start_place = data.get("current_location")
         pickup_place = data.get("pickup")
         dropoff_place = data.get("dropoff")
         cycle_used = float(data.get("cycle_used", 0))
 
-        # 🔹 Validación básica
         if not start_place or not pickup_place or not dropoff_place:
             return Response(
                 {"error": "Missing required fields"},
                 status=400
             )
 
-        # 🔹 Geocoding (ciudad → coordenadas)
         start = geocode(start_place)
         pickup = geocode(pickup_place)
         dropoff = geocode(dropoff_place)
@@ -38,14 +35,12 @@ def plan_trip(request):
                 status=400
             )
 
-        # 🔹 Construir ruta (OSRM)
         coordinates = f"{start};{pickup};{dropoff}"
 
         url = f"http://router.project-osrm.org/route/v1/driving/{coordinates}?overview=full&geometries=geojson"
 
         res = requests.get(url).json()
 
-        # 🔹 Validar respuesta de routing
         if "routes" not in res or len(res["routes"]) == 0:
             return Response(
                 {
@@ -57,14 +52,11 @@ def plan_trip(request):
 
         route = res["routes"][0]
 
-        # 🔹 Datos calculados
         duration_hours = route["duration"] / 3600
         distance_km = route["distance"] / 1000
 
-        # 🔹 Logs ELD
         logs = generate_logs(duration_hours, cycle_used)
 
-        # 🔹 Respuesta final
         return Response({
             "route": route["geometry"],   # para mapa
             "distance_km": round(distance_km, 2),

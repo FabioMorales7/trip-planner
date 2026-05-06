@@ -6,7 +6,6 @@
 
 import requests
 
-# 🔥 cache simple (nivel pro básico)
 cache = {}
 
 def geocode(place):
@@ -35,24 +34,18 @@ def generate_logs(total_hours, cycle_used):
 
     while remaining_hours > 0:
         segments = []
-
-        # 🔥 Inicio del día (0 → 6:30)
         if day == 1:
-            # Día 1 empieza Off Duty
             segments.append({
                 "type": "off",
                 "start": 0,
                 "end": 6.5
             })
         else:
-            # Días siguientes empiezan en Sleeper
             segments.append({
                 "type": "sleeper",
                 "start": 0,
                 "end": 6.5
             })
-
-        # 🔥 Pre-trip (6:30 → 7)
         segments.append({
             "type": "on_duty",
             "start": 6.5,
@@ -60,8 +53,6 @@ def generate_logs(total_hours, cycle_used):
         })
 
         current_hour = 7.0
-
-        # 🚛 Driving
         driving_hours = min(11, remaining_hours)
 
         segments.append({
@@ -73,7 +64,6 @@ def generate_logs(total_hours, cycle_used):
         current_hour += driving_hours
         remaining_hours -= driving_hours
 
-        # 🔥 Fin del día
         if current_hour < 24:
             if remaining_hours > 0:
                 segment_type = "sleeper"
